@@ -345,20 +345,11 @@ public class SQLiteAssetHelper extends SQLiteOpenHelper {
 
 	private SQLiteDatabase createOrOpenDatabase(boolean force) throws SQLiteAssetException {		
 		SQLiteDatabase db = returnDatabase();
-		if (db != null) {
-			// database already exists
-			if (force) {
-				Log.w(TAG, "forcing database upgrade!");
-				copyDatabaseFromAssets();
-				db = returnDatabase();
-			}
-			return db;
-		} else {
-			// database does not exist, copy it from assets and return it
+		if (db == null || force) {
 			copyDatabaseFromAssets();
 			db = returnDatabase();
-			return db;
 		}
+		return db;
 	}
 
 	private SQLiteDatabase returnDatabase(){
