@@ -99,7 +99,7 @@ public class SQLiteAssetHelper extends SQLiteOpenHelper {
 		super(context, name, factory, version);
 
 		if (version < 1) throw new IllegalArgumentException("Version must be >= 1, was " + version);
-		if (name == null) throw new IllegalArgumentException("Databse name cannot be null");
+		if (name == null) throw new IllegalArgumentException("Database name cannot be null");
 
 		mContext = context;
 		mName = name;
