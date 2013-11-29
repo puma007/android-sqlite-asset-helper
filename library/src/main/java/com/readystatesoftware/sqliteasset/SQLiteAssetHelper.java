@@ -464,9 +464,9 @@ public class SQLiteAssetHelper extends SQLiteOpenHelper {
 	 * alphanumeric order of <code>10_11</code> before <code>9_10</code>.
 	 * </p>
 	 */
-	private class VersionComparator implements Comparator<String> {
-		private Pattern pattern = Pattern
-				.compile(".*_upgrade_([0-9]+)-([0-9]+).*");
+	private static class VersionComparator implements Comparator<String> {
+
+		private static final Pattern PATTERN = Pattern.compile(".*_upgrade_([0-9]+)-([0-9]+).*");
 
 		/**
 		 * Compares the two specified upgrade script strings to determine their
@@ -489,8 +489,8 @@ public class SQLiteAssetHelper extends SQLiteOpenHelper {
 		 */
 		@Override
 		public int compare(String file0, String file1) {
-			Matcher m0 = pattern.matcher(file0);
-			Matcher m1 = pattern.matcher(file1);
+			final Matcher m0 = PATTERN.matcher(file0);
+			final Matcher m1 = PATTERN.matcher(file1);
 
 			if (!m0.matches()) {
 				Log.w(TAG, "could not parse upgrade script file: " + file0);
@@ -502,22 +502,22 @@ public class SQLiteAssetHelper extends SQLiteOpenHelper {
 				throw new SQLiteAssetException("Invalid upgrade script file");
 			}
 
-			int v0_from = Integer.valueOf(m0.group(1));
-			int v1_from = Integer.valueOf(m1.group(1));
-			int v0_to = Integer.valueOf(m0.group(2));
-			int v1_to = Integer.valueOf(m1.group(2));
+			int v0From = Integer.valueOf(m0.group(1));
+			int v1From = Integer.valueOf(m1.group(1));
+			int v0To = Integer.valueOf(m0.group(2));
+			int v1To = Integer.valueOf(m1.group(2));
 
-			if (v0_from == v1_from) {
+			if (v0From == v1From) {
 				// 'from' versions match for both; check 'to' version next
 
-				if (v0_to == v1_to) {
+				if (v0To == v1To) {
 					return 0;
 				}
 
-				return v0_to < v1_to ? -1 : 1;
+				return v0To < v1To ? -1 : 1;
 			}
 
-			return v0_from < v1_from ? -1 : 1;
+			return v0From < v1From ? -1 : 1;
 		}
 	}
 
